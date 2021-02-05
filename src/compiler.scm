@@ -123,16 +123,16 @@
 ;;;;
 ;;;; All our values are 32 bit and their types are encoded in the lower bits
 ;;;; like so:
-;;;;                  |   29 bit   |type
-;;;;                  -------------+----
-;;;;  - Integer:      SV...VVVVVVVVV|000
-;;;;  - Real:         SV...VVVVVVVVV|001 (it's not a goal to implement them)
+;;;;                  |   29 bit    |type
+;;;;                  --------------+----
+;;;;  - Integer:      VV...VVVVVVVVV|000
+;;;;  - Real:         VV...VVVVVVVVV|001 (it's not a goal to implement them)
 ;;;;  - Pair:         AA...AAAAAAAAA|010
 ;;;;  - Vector:       AA...AAAAAAAAA|011
 ;;;;  - Procedure:    AA...AAAAAAAAA|100
 ;;;;  - Boolean:      VV...VVVVVVVVV|101
 ;;;;  - Char:         00...0VVVVVVVV|110
-;;;;                       |<- 8b->|
+;;;;                       |<- 8b ->|
 ;;;;
 ;;;; Being the type encoded in low values keeps the sign correctly set so we
 ;;;; can compare lower or higher than zero or the size of two numbers of the
@@ -140,7 +140,6 @@
 ;;;; Our 29 bit addresses can point to 2^29 Bytes in memory, that means we can
 ;;;; address 8 * 2^29 bytes = 2^3 * 2^29 = 2^32 = 4 Gbit = 512 MB, more than
 ;;;; enough for our targets.
-;when (not (memq const (map cons const-pool)))
 
 ;;; CONSTANTS
 (define const-pool '())
@@ -149,7 +148,9 @@
   (let* ((found (assoc const const-pool))
          (label (if found
                     (cdr found)
-                    (string-append "const-" (number->string (length const-pool))))))
+                    (string-append
+                      "const-"
+                      (number->string (length const-pool))))))
     (when (not found)
       (set! const-pool (alist-cons const label const-pool)))
     (emit "lw a0, " label)))
@@ -166,30 +167,20 @@
     ((integer? value) (int->binstring value))
     ((real?    value) (error "Not implemented yet"))))
 
-; Does this make any sense?
-; TODO: Make it use SRFI-60
-(define (int->binstring i)
-  (define MAXINT (expt 2 28)) ; All numbers are signed
-  (when (or (< i (- MAXINT)) (>= i MAXINT))
-    (error "Integer is too large or too small"))
-  (let ((textblock (make-string 34 #\0))
-        (numstring (number->string (abs i) 2)))
-    (string-set! textblock 0 #\0) ; Set 0b at the beginning
-    (string-set! textblock 1 #\b) ; Set 0b at the beginning
-    (when (< i 0)
-      (string-set! textblock 2 #\1))
-    (let loop ((cur 30)
-               (rem numstring))
-      (when (> (string-length rem) 0)
-        (string-set!
-          textblock
-          cur
-          (string-ref rem (- (string-length rem) 1)))
-        (loop (- cur 1)
-              (substring rem 0 (- (string-length rem) 1)))))
-    (string-fill! textblock #\0 31 34)
-    textblock))
-
+;; Using strings is not very efficient but it helps us see the generated binary
+;; value we store in the memory at this point
+(define MAX_INTEGER  (- (ash #b1 29) 1))
+(define (int->binstring int)
+  (when (> (abs int) MAX_INTEGER)
+    (error (string-append "Integers exceeds the max size: "
+                          (number->string int))))
+  (string-append
+    "0b"
+    (let ((str (number->string (+ int 1 MAX) 2)))
+      (if (< 0 int)
+          (substring str 1)
+          str))
+    "000"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
