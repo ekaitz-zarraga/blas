@@ -1,0 +1,11 @@
+%rec: Bibliography
+
+Title: Three Implementation Models for Scheme
+Author: R. Kent Dybvig
+Summary: Three models of implementation for scheme.
++   - Heap based
++   - Stack based
++   - String based
+File: 3imp.pdf
+Url: www.cs.indiana.edu/~dyb/papers/3imp.pdf
+
