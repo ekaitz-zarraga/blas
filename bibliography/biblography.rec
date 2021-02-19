@@ -25,3 +25,9 @@ Summary: Introduction to some different garbage collection techniques and a
 + separately.
 Url: https://www.cs.tufts.edu/~nr/cs257/archive/andrew-appel/simple-gen.pdf
 File: appel88simplegen.pdf
+
+Title: A functional language and compiler for the Arduino micro-controller
+Author: Ryan Suchocki
+Summary: The dissertation of MicroScheme, a Scheme compiler for the Arduino.
+Url: http://microscheme.org/literature.html
+File: dissertation.pdf
