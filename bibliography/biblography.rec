@@ -9,3 +9,19 @@ Summary: Three models of implementation for scheme.
 File: 3imp.pdf
 Url: www.cs.indiana.edu/~dyb/papers/3imp.pdf
 
+
+Title: Simple Generational Garbage Collection and Fast Allocation
+Author: Andrew W. Appel
+Summary: Introduction to some different garbage collection techniques and a
++ proposition on a garbage collection that combines some. It basically is a
++ copying garbage collector with a "generation" concept that facilitates
++ the process.
++ Generations basically describe that programming languages that don't make an
++ extensive use of assignment can optimize the process knowing that recent
++ objects are more likely to be garbage collected than older objects, and
++ knowing that references look more like a DAG than an cyclic tree.
++ Those things allow an aggressive optimization on the copying garbage
++ collector (Cheney), spliting the heap in two generation that are analysed
++ separately.
+Url: https://www.cs.tufts.edu/~nr/cs257/archive/andrew-appel/simple-gen.pdf
+File: appel88simplegen.pdf
