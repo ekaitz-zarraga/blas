@@ -63,6 +63,8 @@
       (tag "syscall_buffer")
       (emit ".skip 64"))
 
-    (define (finish) 
+    (define (finish)
       (emit "li a0, 0")
-      (emit "j exit"))))
+      (emit "j exit"))
+
+    ))

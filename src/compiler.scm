@@ -30,7 +30,8 @@
 
 ;;; CONSTANTS
 (define const-pool '((#t . "TRUE")
-                     (#f . "FALSE")))
+                     (#f . "FALSE")
+                     (() . "NIL")))
 
 (define (found-constant const)
   (let* ((found (assoc const const-pool))
