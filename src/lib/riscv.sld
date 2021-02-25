@@ -1,0 +1,6 @@
+(define-library (lib riscv)
+  (import (scheme base)
+          (scheme write)
+          (srfi srfi-60))
+  (export emit tag comment push pop static-data load-word =? intadd)
+  (include "riscv.scm"))

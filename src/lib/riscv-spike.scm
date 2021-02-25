@@ -61,7 +61,8 @@
       (tag "fromhost")
       (emit ".dword 0")
       (tag "syscall_buffer")
-      (emit ".skip 64"))
+      (emit ".skip 64")
+      (tag "BRK"))
 
     (define (finish)
       (emit "li a0, 0")

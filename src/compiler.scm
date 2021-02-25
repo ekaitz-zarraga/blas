@@ -11,23 +11,6 @@
   (call-with-input-file file
     (lambda (port) (read port))))
 
-;;; INLINED
-
-; Integers can be added directly without affecting the value
-; Doesn't check!
-(define (intadd)
-  (emit "add a0, a0, a1"))
-(define (intsub)
-  (emit "sub a0, a0, a1"))
-(define (=2)
-  (emit "beq a0, a1, 1f")
-  (emit "lw a0, FALSE")
-  (emit "j 2f")
-  (tag "1")
-  (emit "lw a0, TRUE")
-  (tag "2"))
-
-
 ;;; CONSTANTS
 (define const-pool '((#t . "TRUE")
                      (#f . "FALSE")
@@ -50,6 +33,7 @@
 
 (define (compile-call call args)
   ;; TODO: ThIS IS WRONG BUT IT'S JUST AN IDEA
+  ;; Rewrite the push/pop to avoid using register names
   "Compile inlined, it expects the arguments to be stored on the stack"
   (define argc (length args))
   (let loop ((c argc)
@@ -66,23 +50,7 @@
       (loop (- c 1)))))
 
 
-(define (compile-if args)
-  (when (let ((l (length args)))
-          (or (< 3 l) (> 2 l)))
-    (error "Malformed if: (if CONDITION BODY [ELSE-BODY])"))
 
-  (let ((condition (first args))
-        (body      (second args))
-        (else-body (if (= 3 (length args)) (third args) #f)))
-
-    (compile condition)
-    (emit "lw a1, FALSE")
-    (emit "beq a0, a1, 1f")
-    (compile body)
-    (emit "j 2f")
-    (tag "1")
-    (compile else-body)
-    (tag "2")))
 
 (define (compile-exp call args)
   (cond
@@ -96,6 +64,7 @@
 (define (compile ex)
   (cond
     ((integer?  ex) (found-constant ex))
+    ((char?     ex) (found-constant ex))
     ((list?     ex) (compile-exp (car ex) (cdr ex)))))
 
 (define (compile-to-file ex)
