@@ -9,7 +9,6 @@ Summary: Three models of implementation for scheme.
 File: 3imp.pdf
 Url: www.cs.indiana.edu/~dyb/papers/3imp.pdf
 
-
 Title: Simple Generational Garbage Collection and Fast Allocation
 Author: Andrew W. Appel
 Summary: Introduction to some different garbage collection techniques and a
@@ -29,5 +28,33 @@ File: appel88simplegen.pdf
 Title: A functional language and compiler for the Arduino micro-controller
 Author: Ryan Suchocki
 Summary: The dissertation of MicroScheme, a Scheme compiler for the Arduino.
++ (Link is dead)
 Url: http://microscheme.org/literature.html
 File: dissertation.pdf
+
+Title: First-Class Continuations on the Java Virtual Machine: An Implementation
++ within the Kawa Scheme Compiler
+Author: Andrea Bernardini
+Summary: A thesis on Kawa, but it explains continuations, scheme and some other
++ things that look interesting.
+Url: https://andrebask.github.io/thesis/
+
+Title: Introduction to Compiler Construction
+Author: UBC's Computer Science 411 (CPSC 411
+Summary: The goal of this course is to give students experience designing,
++ implementing, and extending programming languages. Students will start from a
++ machine language, the x86-64 CPU instruction set with Linux system calls
++ (x64), and incrementally build a compiler for a subset of Racket to this
++ machine language. In the proceess, students will practice building,
++ extending, and maintaining a complex piece of software, and practice
++ creating, enforcing, and exploiting abstractions formalized in programming
++ languages.
+Url: https://www.students.cs.ubc.ca/~cs-411/2020w2/index.html
+
+Title: Runtime Tags Aren't Necessary
+Author: Andrew W. Appel
+Summary: Describes how runtime type tags affect the garbage collector, and
++ the operation overhead they carry. It's short and it basically says
++ statically typed languages just don't need them so they are superior.
+File: runtime_tags_not_necessary.pdf
+Url: http://www.cs.princeton.edu/~appel/papers/142.ps
