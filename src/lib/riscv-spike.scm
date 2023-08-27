@@ -11,7 +11,7 @@
       !! Spike specific behavior: Initializes Stack Pointer to 0x80001000"
       (emit  ".text")
       (emit  ".globl _start")
-      (tag "_start")
+      (label "_start")
       (emit  "li sp, 0x80001000")
       (emit ""))
 
@@ -19,14 +19,14 @@
       "Finish with Spike specific functions
       !! Spike specific behavior: Mostly everything"
       (emit "")
-      (tag "exit")
+      (label "exit")
       (emit  "move a1, a0")
       (emit  "li a0, 93")
       (emit  "jal syscall")
-      (tag "1")
+      (label "1")
       (emit  "j 1b") ; Wait indefinitely until syscall returns
 
-      (tag "syscall")
+      (label "syscall")
       (emit "la t0, syscall_buffer")
       (emit "sw a0, (t0)")
       (emit "sw a1, 8(t0)")
@@ -39,7 +39,7 @@
       (emit "la t1, tohost")
       (emit "sw t0, (t1)")
       (emit "la t1, fromhost")
-      (tag "1")
+      (label "1")
       (emit "lw t2, (t1)")
       (emit "beqz t2, 1b")
       (emit "sw zero, (t1)")
@@ -54,15 +54,15 @@
       (emit ".data")
       (emit ".align 6")
       (emit ".global tohost")
-      (tag "tohost")
+      (label "tohost")
       (emit ".dword 0")
       (emit ".align 6")
       (emit ".global fromhost")
-      (tag "fromhost")
+      (label "fromhost")
       (emit ".dword 0")
-      (tag "syscall_buffer")
+      (label "syscall_buffer")
       (emit ".skip 64")
-      (tag "BRK"))
+      (label "BRK"))
 
     (define (finish)
       (emit "li a0, 0")

@@ -2,8 +2,8 @@
 (define (emit . args)
   (display (apply string-append (cons "\t" args)))
   (newline))
-(define (tag tagname)
-  (display (string-append tagname ":"))
+(define (label labelname)
+  (display (string-append labelname ":"))
   (newline))
 (define (comment text)
   (display (string-append "## " text))
@@ -24,16 +24,16 @@
   (emit "beq a0,a1,1f")
   (emit "lw a0,FALSE")
   (emit "j 2f")
-  (tag "1")
+  (label "1")
   (emit "lw a0,TRUE")
-  (tag "2"))
+  (label "2"))
 
 ;; stdlib
-(define (predicate fname mask tag)
+(define (predicate fname mask labelname)
   (lambda _
-    (tag  fname)
+    (label fname)
     (emit "andi a0,a0," mask)
-    (emit "li a1," tag) ; Type tag
+    (emit "li a1," labelname)
     (=?)
     (emit "ret")))
 (define _boolean?  (predicate "boolean?" "0xF"  "0b0110"))
@@ -41,12 +41,12 @@
 (define _pointer?  (predicate "pointer?" "0x3"  "0b000"))
 (define _char?     (predicate "char?"    "0xFF" "0b00001010"))
 (define (_null?)
-  (tag  "null?")
+  (label "null?")
   (emit "lw a1,NIL")
   (=?)
   (emit "ret"))
 (define (_string?)
-  (tag "string?")
+  (label "string?")
   (emit "mv s0,a0")
   (_pointer?)
   (emit "lw a1,TRUE")
@@ -54,7 +54,7 @@
   (emit "lb a0,(a0)")
   (emit "andi a0,a0,0xF")
   ;TODO CHECK IF IT'S STRING
-  (tag "1"))
+  (label "1"))
 
 (define (intadd)
   "Uses a0 and a1. Assumes integers in both registers."
@@ -138,7 +138,7 @@
 (define (emit-constants const-pool)
   (for-each
     (lambda (const)
-      (tag (cdr const))
+      (label (cdr const))
       (emit ".word " (const->data (car const))))
     const-pool))
 
