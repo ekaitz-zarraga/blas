@@ -11,6 +11,14 @@
 (define (load-word label)
   (emit "lw a0, " label))
 
+;; This could be also a `li a0, ...`
+(define (load-true)
+  (load-word "TRUE"))
+(define (load-false)
+  (load-word "FALSE"))
+(define (load-nil)
+  (load-word "NIL"))
+
 ;; Inlined
 (define (push reg)
   (emit "addi sp,sp,-4")

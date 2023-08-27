@@ -27,6 +27,11 @@
       (set! const-pool (alist-cons const label const-pool)))
     (load-word label)))
 
+(define (found-boolean b)
+  (if b
+    (load-true)
+    (load-false)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -63,6 +68,7 @@
 
 (define (compile ex)
   (cond
+    ((boolean?  ex) (found-boolean ex))
     ((integer?  ex) (found-constant ex))
     ((char?     ex) (found-constant ex))
     ((list?     ex) (compile-exp (car ex) (cdr ex)))))
